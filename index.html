@@ -2,7 +2,7 @@
 <html lang="pl">
 <head>
   <meta charset="UTF-8">
-  <title>Wyświetlanie Słów</title>
+  <title>Strona dla taty</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -22,24 +22,34 @@
   </style>
 </head>
 <body>
-  <input type="text" id="inputText" placeholder="PGN z usuniętym początkiem"><br>
+  <input type="text" id="inputText" placeholder="PGN"><br>
   <input type="number" id="delaySeconds" placeholder="Czas w sekundach" min="0.1" step="0.1"><br>
   <button onclick="pokazSlowa()">Pokaż</button>
   <div id="output"></div>
 
   <script>
     function pokazSlowa() {
-      // Ukryj pole tekstowe i pole czasu
+      // Ukryj pola wejściowe
       document.getElementById("inputText").style.display = "none";
       document.getElementById("delaySeconds").style.display = "none";
 
       const tekst = document.getElementById("inputText").value;
       const delay = parseFloat(document.getElementById("delaySeconds").value) || 1; // domyślnie 1 sekunda
 
-      // Usuń numerki typu "1.", "2." itd.
-      const bezNumerów = tekst.replace(/\d+\.\s*/g, '');
+      // Znajdź pozycję pierwszego wystąpienia "1."
+      const startIndex = tekst.indexOf("1.");
+      if (startIndex === -1) {
+        document.getElementById("output").textContent = "Brak numeru '1.' w tekście!";
+        return;
+      }
 
-      // Podział po spacjach
+      // Wytnij tekst od "1." w dół
+      const tekstOdJedynki = tekst.slice(startIndex);
+
+      // Usuń wszystkie numery typu "1.", "2." itd.
+      const bezNumerów = tekstOdJedynki.replace(/\d+\.\s*/g, '');
+
+      // Podziel na słowa po spacjach
       const slowa = bezNumerów.split(/\s+/);
 
       const output = document.getElementById("output");
@@ -50,7 +60,7 @@
         if (index < slowa.length) {
           output.textContent = slowa[index];
           index++;
-          setTimeout(wyswietl, delay * 1000); // opóźnienie w milisekundach
+          setTimeout(wyswietl, delay * 1000); // delay w sekundach
         }
       }
 
