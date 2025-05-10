@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Wyświetlanie Słów</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 50px;
+    }
+    input, button {
+      font-size: 18px;
+      padding: 10px;
+      margin: 10px;
+      width: 80%;
+    }
+    #output {
+      font-size: 24px;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+  <input type="text" id="inputText" placeholder="PGN z usuniętym początkiem"><br>
+  <input type="number" id="delaySeconds" placeholder="Czas w sekundach" min="0.1" step="0.1"><br>
+  <button onclick="pokazSlowa()">Pokaż</button>
+  <div id="output"></div>
+
+  <script>
+    function pokazSlowa() {
+      // Ukryj pole tekstowe i pole czasu
+      document.getElementById("inputText").style.display = "none";
+      document.getElementById("delaySeconds").style.display = "none";
+
+      const tekst = document.getElementById("inputText").value;
+      const delay = parseFloat(document.getElementById("delaySeconds").value) || 1; // domyślnie 1 sekunda
+
+      // Usuń numerki typu "1.", "2." itd.
+      const bezNumerów = tekst.replace(/\d+\.\s*/g, '');
+
+      // Podział po spacjach
+      const slowa = bezNumerów.split(/\s+/);
+
+      const output = document.getElementById("output");
+      output.textContent = "";
+
+      let index = 0;
+      function wyswietl() {
+        if (index < slowa.length) {
+          output.textContent = slowa[index];
+          index++;
+          setTimeout(wyswietl, delay * 1000); // opóźnienie w milisekundach
+        }
+      }
+
+      wyswietl();
+    }
+  </script>
+</body>
+</html>
